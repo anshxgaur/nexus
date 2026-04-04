@@ -70,6 +70,26 @@ class ExtractResponse(BaseModel):
     key_points: List[str]
 
 
+async def call_groq(prompt: str, system: str = "", max_tokens: int = 1024) -> str:
+    """Call Groq cloud API for fast LLM response."""
+    if not settings.GROQ_API_KEY:
+        raise ValueError("GROQ_API_KEY not configured")
+
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+    messages.append({"role": "user", "content": prompt})
+
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        response = await client.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={"Authorization": f"Bearer {settings.GROQ_API_KEY}", "Content-Type": "application/json"},
+            json={"model": settings.GROQ_MODEL, "messages": messages, "max_tokens": max_tokens, "temperature": 0.1},
+        )
+        response.raise_for_status()
+        return response.json()["choices"][0]["message"]["content"].strip()
+
+
 async def call_ollama(prompt: str, system: str = "", max_tokens: int = 1024) -> str:
     """Call local Ollama LLM."""
     messages = []
@@ -90,6 +110,16 @@ async def call_ollama(prompt: str, system: str = "", max_tokens: int = 1024) -> 
         response.raise_for_status()
         data = response.json()
         return data["message"]["content"].strip()
+
+
+async def call_llm(prompt: str, system: str = "", max_tokens: int = 1024) -> str:
+    """Smart LLM caller: tries Groq first (fast), falls back to Ollama."""
+    if settings.GROQ_API_KEY:
+        try:
+            return await call_groq(prompt, system=system, max_tokens=max_tokens)
+        except Exception as e:
+            log.warning("groq.fallback", error=str(e))
+    return await call_ollama(prompt, system=system, max_tokens=max_tokens)
 
 
 @router.post("/search", response_model=SearchResponse)
@@ -155,9 +185,9 @@ Question: {body.query}
 Answer based on the context above. Reference specific sources where relevant."""
 
         try:
-            answer = await call_ollama(prompt, system=RAG_SYSTEM_PROMPT)
+            answer = await call_llm(prompt, system=RAG_SYSTEM_PROMPT)
         except Exception as e:
-            log.error("ollama.call.failed", error=str(e))
+            log.error("llm.call.failed", error=str(e))
             answer = "AI service temporarily unavailable. Here are the relevant results from your search."
     else:
         answer = "No relevant information found in the company knowledge base for your query."
@@ -226,7 +256,7 @@ Extract all actionable tasks (with owner if mentioned) and all decisions made.
 """
 
     try:
-        raw = await call_ollama(prompt, max_tokens=2048)
+        raw = await call_llm(prompt, max_tokens=2048)
         import json
         import re
         # Extract JSON from response
@@ -243,7 +273,7 @@ Extract all actionable tasks (with owner if mentioned) and all decisions made.
 
     # Fallback: plain text summary
     summary_prompt = f"Summarize this text in 3-5 bullet points:\n\n{text_to_summarize[:4000]}"
-    summary = await call_ollama(summary_prompt)
+    summary = await call_llm(summary_prompt)
     return SummarizeResponse(summary=summary, tasks=[], decisions=[])
 
 
@@ -269,7 +299,7 @@ Respond ONLY with valid JSON:
 Be precise. Only include items clearly present in the text."""
 
     try:
-        raw = await call_ollama(prompt, max_tokens=1024)
+        raw = await call_llm(prompt, max_tokens=1024)
         import json, re
         json_match = re.search(r'\{.*\}', raw, re.DOTALL)
         if json_match:

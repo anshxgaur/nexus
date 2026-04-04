@@ -17,6 +17,7 @@ router = APIRouter()
 
 class MeetingCreate(BaseModel):
     title: str
+    scheduled_at: Optional[datetime] = None
 
 
 class MeetingOut(BaseModel):
@@ -26,8 +27,15 @@ class MeetingOut(BaseModel):
     status: str
     created_by: str
     summary: Optional[str]
+    scheduled_at: Optional[datetime]
     created_at: datetime
 
+    model_config = {"from_attributes": True}
+
+
+class ParticipantOut(BaseModel):
+    user_id: str
+    joined_at: datetime
     model_config = {"from_attributes": True}
 
 
@@ -48,12 +56,28 @@ async def create_meeting(
         title=body.title,
         room_name=room_name,
         created_by=user.id,
+        scheduled_at=body.scheduled_at,
         status="scheduled",
     )
     db.add(meeting)
     await db.flush()
     await db.refresh(meeting)
+    # Also add creator as participant
+    db.add(MeetingParticipant(meeting_id=meeting.id, user_id=user.id))
+    await db.flush()
     return meeting
+
+
+@router.get("/{meeting_id}/participants", response_model=List[ParticipantOut])
+async def get_participants(
+    meeting_id: str,
+    db: AsyncSession = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    result = await db.execute(
+        select(MeetingParticipant).where(MeetingParticipant.meeting_id == meeting_id)
+    )
+    return result.scalars().all()
 
 
 @router.get("", response_model=List[MeetingOut])

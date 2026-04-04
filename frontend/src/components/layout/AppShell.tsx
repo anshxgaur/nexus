@@ -8,11 +8,12 @@ import { TodoView } from "@/components/todos/TodoView";
 import { CalendarView } from "@/components/calendar/CalendarView";
 import { PerformanceView } from "@/components/performance/PerformanceView";
 import { UserManagementView } from "@/components/performance/UserManagementView";
+import { NovaChatPanel } from "@/components/nova/NovaChatPanel";
 import { useChatStore } from "@/stores/chatStore";
 import { useMeetingStore } from "@/stores/meetingStore";
 import { AnimatePresence, motion } from "framer-motion";
 
-export type View = "chat" | "meetings" | "ai" | "mail" | "todos" | "calendar" | "performance" | "users";
+export type View = "chat" | "meetings" | "ai" | "mail" | "todos" | "calendar" | "performance" | "users" | "nova";
 
 export function AppShell() {
   const [view, setView] = useState<View>("chat");
@@ -34,7 +35,6 @@ export function AppShell() {
       
       <main className="flex-1 flex flex-col min-w-0 p-4 relative z-10">
         <div className="flex-1 flex flex-col glass rounded-[2.5rem] overflow-hidden relative border border-white/5 shadow-2xl">
-          {/* Main View Transition Container */}
           <AnimatePresence mode="wait">
             <motion.div
               key={view}
@@ -52,6 +52,7 @@ export function AppShell() {
               {view === "calendar" && <CalendarView />}
               {view === "performance" && <PerformanceView />}
               {view === "users" && <UserManagementView />}
+              {view === "nova" && <NovaChatPanel />}
             </motion.div>
           </AnimatePresence>
         </div>

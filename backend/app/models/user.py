@@ -81,6 +81,7 @@ class Meeting(Base):
     status: Mapped[str] = mapped_column(SAEnum("scheduled", "active", "ended", name="meeting_status"), default="scheduled")
     created_by: Mapped[str] = mapped_column(String(36), ForeignKey("users.id"))
     summary: Mapped[str | None] = mapped_column(Text)
+    scheduled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     ended_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
@@ -88,6 +89,7 @@ class Meeting(Base):
     transcripts: Mapped[list["Transcript"]] = relationship(back_populates="meeting", cascade="all, delete-orphan")
     tasks: Mapped[list["Task"]] = relationship(back_populates="meeting")
     decisions: Mapped[list["Decision"]] = relationship(back_populates="meeting")
+
 
 
 class MeetingParticipant(Base):

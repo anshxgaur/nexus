@@ -1,0 +1,5 @@
+src/lib/api.ts(4,30): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/lib/novaRouter.ts(79,30): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/main.tsx(1,8): error TS1259: Module '"C:/PROJECTS/nexus -workspace/frontend/node_modules/@types/react/index"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+src/main.tsx(2,8): error TS1192: Module '"C:/PROJECTS/nexus -workspace/frontend/node_modules/@types/react-dom/client"' has no default export.
+src/stores/chatStore.ts(85,17): error TS2339: Property 'type' does not exist on type 'Message'.

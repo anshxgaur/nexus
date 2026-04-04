@@ -50,6 +50,12 @@
            rounded-xl transition-all duration-300 active:scale-[0.98];
   }
 
+  .btn-danger {
+    @apply bg-rose-500/10 border border-rose-500/30 text-rose-400 
+           hover:bg-rose-500/20 font-semibold px-5 py-2.5 rounded-2xl
+           transition-all duration-300 active:scale-[0.98] disabled:opacity-50;
+  }
+
   .input-base {
     @apply bg-black/20 border border-white/5 text-ink-primary placeholder:text-ink-muted
            rounded-2xl px-4 py-3 text-sm outline-none backdrop-blur-md
@@ -78,7 +84,7 @@
   .sidebar-item.active {
     @apply bg-accent/10 text-accent font-semibold;
   }
-  
+
   .sidebar-item.active::before {
     content: '';
     @apply absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-accent rounded-full;
@@ -101,5 +107,14 @@
 @layer utilities {
   .shadow-glow {
     box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }

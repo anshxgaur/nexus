@@ -39,6 +39,11 @@ class Settings(BaseSettings):
     CHUNK_SIZE: int = 512
     CHUNK_OVERLAP: int = 64
 
+    # Groq (optional fast LLM fallback)
+    GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
+
+
 
 @lru_cache
 def get_settings() -> Settings:
