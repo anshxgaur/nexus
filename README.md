@@ -116,28 +116,6 @@ G --> K[Storage Access]
   <img align="right" src="https://img.icons8.com/material-outlined/24/ffffff/github.png" alt="GitHub Icon">
 </a>
 
-##   🚀 System Architecture & Workflow
-
-The platform is built as a modular system combining AI-driven automation with Web3 infrastructure. Each module operates independently while communicating through APIs and smart contracts.
-
-###  🔄 Workflow
-Authentication
-Users connect via wallet (e.g., MetaMask)
-DID (Decentralized Identity) is initialized for secure access
-Dashboard Load
-User-specific data is fetched:
-Meetings
-Emails
-Tasks
-Data layer
-Module Execution
-Each feature (Meeting, Email, Task Manager) runs as a separate service
-AI processes inputs and generates summaries, insights, and priorities
-Blockchain Layer
-Smart contracts handle:
-Access control
-Data ownership
-Transaction logic
-Storage Layer
-Off-chain storage (IPFS / Arweave)
-On-chain references for verification
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=700&size=50&duration=3000&pause=1000&color=00BFFF&center=true&vCenter=true&width=1000&lines=Made+with+❤️+for+Eclipse+6.0" alt="Typing SVG">
+</p>
