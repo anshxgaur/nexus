@@ -11,6 +11,8 @@
 ![AI](https://img.shields.io/badge/AI-NLP%20%7C%20Summarization%20%7C%20Automation-ef4444?style=for-the-badge)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL%20%7C%20MongoDB-14b8a6?style=for-the-badge)
 ![DevOps](https://img.shields.io/badge/DevOps-Docker%20%7C%20CI/CD-6366f1?style=for-the-badge)
+
+
 ![](header.png)
 
 ## 🧠 Vision
