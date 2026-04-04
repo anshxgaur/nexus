@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useChatStore } from "@/stores/chatStore";
 import { useAuthStore } from "@/stores/authStore";
 import { format, isToday, isYesterday, parseISO } from "date-fns";
+import { Send, Hash, Info, User as UserIcon, Bot } from "lucide-react";
 
 function formatTs(iso: string) {
   const d = parseISO(iso);
@@ -15,11 +16,11 @@ function Avatar({ name, isAI }: { name: string; isAI?: boolean }) {
   const initials = name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2);
   return (
     <div
-      className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-semibold ${
-        isAI ? "bg-info/20 border border-info/30 text-info" : "bg-accent/15 border border-accent/25 text-accent"
+      className={`w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center text-xs font-bold ${
+        isAI ? "bg-accent/10 text-accent border border-accent/20" : "bg-white/5 text-ink-secondary border border-white/10"
       }`}
     >
-      {isAI ? "AI" : initials}
+      {isAI ? <Bot size={16} /> : initials}
     </div>
   );
 }
@@ -36,15 +37,10 @@ export function ChatView() {
   const channelMessages = activeChannelId ? (messages[activeChannelId] ?? []) : [];
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Avoid smooth scroll if there are too many messages to prevent jitters
+    const behavior = channelMessages.length > 50 ? "auto" : "smooth";
+    bottomRef.current?.scrollIntoView({ behavior });
   }, [channelMessages.length]);
-
-  // Auto-select first channel
-  useEffect(() => {
-    if (!activeChannelId && channels.length > 0) {
-      setActiveChannel(channels[0].id);
-    }
-  }, [channels]);
 
   const handleSend = async () => {
     const text = draft.trim();
@@ -55,7 +51,7 @@ export function ChatView() {
       await sendMessage(text);
     } finally {
       setSending(false);
-      textareaRef.current?.focus();
+      setTimeout(() => textareaRef.current?.focus(), 0);
     }
   };
 
@@ -68,35 +64,44 @@ export function ChatView() {
 
   if (!activeChannelId) {
     return (
-      <div className="flex-1 flex items-center justify-center text-ink-muted">
-        <div className="text-center">
-          <div className="text-4xl mb-3 opacity-30">#</div>
-          <p className="text-sm">Select or create a channel to start chatting</p>
+      <div className="flex-1 flex flex-col items-center justify-center text-ink-muted bg-transparent">
+        <div className="w-20 h-20 bg-white/[0.03] rounded-[2rem] border border-white/5 flex items-center justify-center mb-6">
+          <Hash size={32} className="opacity-20" />
         </div>
+        <h3 className="text-xl font-bold text-ink-primary mb-2">Select a Channel</h3>
+        <p className="text-sm max-w-xs text-center opacity-60">Join the conversation or start a new discussion thread from the sidebar.</p>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-transparent">
       {/* Header */}
-      <div className="h-14 flex items-center px-5 border-b border-surface-border bg-surface-raised flex-shrink-0">
-        <span className="text-ink-muted mr-1.5 text-sm">#</span>
-        <h2 className="font-semibold text-ink-primary text-sm">{activeChannel?.name ?? "…"}</h2>
-        {activeChannel?.description && (
-          <>
-            <div className="w-px h-4 bg-surface-border mx-3" />
-            <span className="text-xs text-ink-secondary truncate">{activeChannel.description}</span>
-          </>
-        )}
+      <div className="h-16 flex items-center justify-between px-8 border-b border-white/5 bg-white/[0.01] backdrop-blur-md z-10">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-white/5 text-ink-muted">
+            <Hash size={18} />
+          </div>
+          <div>
+            <h2 className="font-bold text-ink-primary text-base">{activeChannel?.name ?? "Loading..."}</h2>
+            <p className="text-[10px] text-ink-muted font-medium uppercase tracking-wider">
+              {activeChannel?.description || "Public Channel"}
+            </p>
+          </div>
+        </div>
+        <button className="p-2 rounded-xl hover:bg-white/5 text-ink-muted transition-colors">
+          <Info size={18} />
+        </button>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1">
+      {/* Messages Window */}
+      <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6 no-scrollbar h-full">
         {channelMessages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-ink-muted">
-            <div className="text-5xl mb-4 opacity-20">💬</div>
-            <p className="text-sm">No messages yet. Start the conversation!</p>
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="w-16 h-16 bg-accent/5 rounded-[2rem] flex items-center justify-center mb-6 border border-accent/10">
+              <Bot size={28} className="text-accent opacity-40" />
+            </div>
+            <p className="text-sm font-medium text-ink-muted">Start of <span className="text-white">#{activeChannel?.name}</span></p>
           </div>
         )}
 
@@ -106,63 +111,69 @@ export function ChatView() {
             const prevMsg = channelMessages[i - 1];
             const sameAuthor = prevMsg?.user_id === msg.user_id && !prevMsg?.is_ai;
             const showHeader = !sameAuthor || msg.is_ai;
-            const authorName = msg.user?.name ?? (msg.is_ai ? "Nexus AI" : "Unknown");
+            const authorName = msg.user?.name ?? (msg.is_ai ? "FlowMind AI" : "Anonymous");
 
             return (
               <motion.div
                 key={msg.id}
-                initial={{ opacity: 0, y: 6 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.15 }}
-                className={`flex gap-3 ${showHeader ? "mt-4" : "mt-0.5"}`}
+                className={`flex gap-4 ${showHeader ? "mt-2" : "-mt-4"}`}
               >
-                <div className="w-8 flex-shrink-0">
+                <div className="w-9 flex-shrink-0">
                   {showHeader && <Avatar name={authorName} isAI={msg.is_ai} />}
                 </div>
                 <div className="flex-1 min-w-0">
                   {showHeader && (
-                    <div className="flex items-baseline gap-2 mb-0.5">
-                      <span className={`text-sm font-semibold ${msg.is_ai ? "text-info" : isOwn ? "text-accent" : "text-ink-primary"}`}>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className={`text-xs font-bold leading-none ${msg.is_ai ? "text-accent" : isOwn ? "text-indigo-400" : "text-ink-primary"}`}>
                         {authorName}
                       </span>
-                      <span className="text-[10px] text-ink-muted">{formatTs(msg.created_at)}</span>
+                      <span className="text-[10px] text-ink-muted font-medium opacity-60">{formatTs(msg.created_at)}</span>
                     </div>
                   )}
-                  <p className="text-sm text-ink-primary leading-relaxed whitespace-pre-wrap break-words">
+                  <div className={`text-sm text-ink-primary leading-relaxed whitespace-pre-wrap break-words bg-white/[0.03] border border-white/5 p-4 rounded-2xl rounded-tl-none group hover:bg-white/[0.04] transition-colors ${!showHeader ? 'mt-1' : ''}`}>
                     {msg.text}
-                  </p>
+                  </div>
                 </div>
               </motion.div>
             );
           })}
         </AnimatePresence>
-        <div ref={bottomRef} />
+        <div ref={bottomRef} className="h-4" />
       </div>
 
-      {/* Composer */}
-      <div className="px-5 py-4 border-t border-surface-border bg-surface-raised flex-shrink-0">
-        <div className="flex items-end gap-3 bg-surface-overlay border border-surface-border rounded-xl px-4 py-3 focus-within:border-accent/50 transition-colors">
-          <textarea
-            ref={textareaRef}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={`Message #${activeChannel?.name ?? "…"}`}
-            rows={1}
-            className="flex-1 bg-transparent text-sm text-ink-primary placeholder:text-ink-muted resize-none outline-none leading-relaxed max-h-32 overflow-y-auto"
-            style={{ minHeight: "20px" }}
-          />
-          <button
-            onClick={handleSend}
-            disabled={!draft.trim() || sending}
-            className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent hover:bg-accent-hover disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-90 flex items-center justify-center"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-            </svg>
-          </button>
+      {/* Composer Container */}
+      <div className="px-8 pb-8 pt-2">
+        <div className="glass-card p-2 group focus-within:border-accent/30 transition-all duration-300">
+          <div className="flex items-end gap-3 px-3 py-2">
+            <textarea
+              ref={textareaRef}
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={`Communicate in #${activeChannel?.name ?? "..."}`}
+              rows={1}
+              className="flex-1 bg-transparent text-sm text-ink-primary placeholder:text-ink-muted/50 resize-none outline-none leading-relaxed py-2 max-h-48 overflow-y-auto no-scrollbar"
+              style={{ minHeight: "24px" }}
+            />
+            <button
+              onClick={handleSend}
+              disabled={!draft.trim() || sending}
+              className="flex-shrink-0 w-10 h-10 rounded-xl bg-accent hover:bg-accent-hover text-white disabled:opacity-20 disabled:scale-95 transition-all active:scale-90 flex items-center justify-center shadow-lg shadow-accent/20"
+            >
+              <Send size={18} />
+            </button>
+          </div>
         </div>
-        <p className="text-[10px] text-ink-muted mt-1.5 px-1">Enter to send · Shift+Enter for new line</p>
+        <div className="flex items-center justify-between mt-2 px-4">
+          <p className="text-[9px] text-ink-muted font-bold uppercase tracking-wider">
+            Markdown Supported
+          </p>
+          <p className="text-[9px] text-ink-muted font-medium">
+            <span className="font-bold">Enter</span> to send · <span className="font-bold">Shift+Enter</span> for new line
+          </p>
+        </div>
       </div>
     </div>
   );

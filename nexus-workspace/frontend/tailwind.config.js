@@ -4,35 +4,37 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Nexus design system — dark workspace palette
+        // Deep glassmorphic palette
         surface: {
-          DEFAULT: "#0f0f11",
-          raised: "#17171a",
-          overlay: "#1e1e23",
-          border: "#2a2a32",
+          DEFAULT: "#09090b",
+          raised: "#18181b",
+          overlay: "#27272a",
+          border: "#3f3f46",
         },
         accent: {
-          DEFAULT: "#6c63ff",
-          hover: "#7c75ff",
-          muted: "#6c63ff33",
+          DEFAULT: "rgb(var(--accent))",
+          hover: "rgb(var(--accent-hover))",
+          muted: "rgba(var(--accent), 0.1)",
         },
         ink: {
-          primary: "#f0f0f4",
-          secondary: "#9898a8",
-          muted: "#55556a",
+          primary: "#f8fafc",
+          secondary: "#94a3b8",
+          muted: "#64748b",
         },
-        ok:   "#22c55e",
+        ok:   "#10b981",
         warn: "#f59e0b",
         err:  "#ef4444",
         info: "#3b82f6",
       },
       fontFamily: {
-        sans: ["'DM Sans'", "system-ui", "sans-serif"],
+        sans: ["'Inter'", "system-ui", "sans-serif"],
+        display: ["'Outfit'", "sans-serif"],
         mono: ["'JetBrains Mono'", "monospace"],
       },
       boxShadow: {
-        glass: "0 4px 32px rgba(0,0,0,0.45)",
-        glow: "0 0 20px rgba(108,99,255,0.35)",
+        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
+        "glass-sm": "0 4px 16px 0 rgba(0, 0, 0, 0.2)",
+        glow: "0 0 25px rgba(139, 92, 246, 0.5)",
       },
       borderRadius: {
         xl: "12px",
@@ -40,14 +42,21 @@ export default {
         "3xl": "24px",
       },
       animation: {
-        "slide-in": "slideIn 0.2s ease-out",
-        "fade-up":  "fadeUp 0.25s ease-out",
+        "slide-in": "slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+        "fade-up":  "fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
         pulse_dot:  "pulseDot 1.5s ease-in-out infinite",
+        blob: "blob 7s infinite",
       },
       keyframes: {
-        slideIn:  { from: { transform: "translateX(-8px)", opacity: 0 }, to: { transform: "none", opacity: 1 } },
-        fadeUp:   { from: { transform: "translateY(8px)", opacity: 0 },  to: { transform: "none", opacity: 1 } },
+        slideIn:  { from: { transform: "translateX(-12px)", opacity: 0 }, to: { transform: "none", opacity: 1 } },
+        fadeUp:   { from: { transform: "translateY(12px)", opacity: 0 },  to: { transform: "none", opacity: 1 } },
         pulseDot: { "0%,100%": { opacity: 1 }, "50%": { opacity: 0.3 } },
+        blob: {
+          "0%": { transform: "translate(0px, 0px) scale(1)" },
+          "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+          "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+          "100%": { transform: "translate(0px, 0px) scale(1)" },
+        }
       },
     },
   },

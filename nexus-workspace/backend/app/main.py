@@ -13,7 +13,7 @@ from app.core.config import settings
 from app.core.database import engine, Base
 from app.core.redis_client import redis_client
 from app.core.qdrant_client import qdrant_service
-from app.api import auth, channels, messages, meetings, transcripts, ai, websocket, health
+from app.api import auth, channels, messages, meetings, transcripts, ai, websocket, health, mail, todos, calendar, performance, users
 
 log = structlog.get_logger()
 
@@ -71,6 +71,10 @@ app.include_router(meetings.router,    prefix="/meetings",    tags=["meetings"])
 app.include_router(transcripts.router, prefix="/transcripts", tags=["transcripts"])
 app.include_router(ai.router,          prefix="/ai",          tags=["ai"])
 app.include_router(websocket.router,   prefix="/ws",          tags=["websocket"])
+app.include_router(mail.router,        prefix="/mail",        tags=["mail"])
+app.include_router(todos.router,       prefix="/todos",       tags=["todos"])
+app.include_router(calendar.router,    prefix="/calendar",    tags=["calendar"])
+app.include_router(performance.router, prefix="/performance", tags=["performance"])
 
 
 @app.exception_handler(Exception)

@@ -21,8 +21,6 @@ def utcnow():
 def new_uuid():
     return str(uuid.uuid4())
 
-
-# ── Users ─────────────────────────────────────────────────────────────────────
 class User(Base):
     __tablename__ = "users"
 
@@ -30,12 +28,18 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(128), nullable=False)
     email: Mapped[str] = mapped_column(String(256), unique=True, nullable=False, index=True)
     password_hash: Mapped[str] = mapped_column(String(256), nullable=False)
+    role: Mapped[str] = mapped_column(String(50), default="user")
     avatar_url: Mapped[str | None] = mapped_column(String(512))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     messages: Mapped[list["Message"]] = relationship(back_populates="user")
     meeting_participants: Mapped[list["MeetingParticipant"]] = relationship(back_populates="user")
+    tasks: Mapped[list["Task"]] = relationship(back_populates="assignee")
+    todos: Mapped[list["Todo"]] = relationship(back_populates="user")
+    sent_mails: Mapped[list["Mail"]] = relationship(back_populates="sender", foreign_keys="Mail.sender_id")
+    received_mails: Mapped[list["Mail"]] = relationship(back_populates="recipient", foreign_keys="Mail.recipient_id")
+    calendar_events: Mapped[list["CalendarEvent"]] = relationship(back_populates="user")
 
 
 # ── Channels ──────────────────────────────────────────────────────────────────
@@ -120,14 +124,16 @@ class Task(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
     text: Mapped[str] = mapped_column(Text, nullable=False)
-    assigned_to: Mapped[str | None] = mapped_column(String(256))
+    assigned_to: Mapped[str | None] = mapped_column(String(36), ForeignKey("users.id"))
     status: Mapped[str] = mapped_column(SAEnum("open", "in_progress", "done", name="task_status"), default="open")
     source: Mapped[str] = mapped_column(SAEnum("meeting", "chat", "manual", name="task_source"), default="meeting")
     meeting_id: Mapped[str | None] = mapped_column(String(36), ForeignKey("meetings.id", ondelete="SET NULL"))
     due_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     meeting: Mapped["Meeting | None"] = relationship(back_populates="tasks")
+    assignee: Mapped["User | None"] = relationship(back_populates="tasks")
 
 
 # ── Decisions ─────────────────────────────────────────────────────────────────
@@ -153,3 +159,69 @@ class Document(Base):
     source_type: Mapped[str] = mapped_column(SAEnum("upload", "meeting", "chat", name="doc_source"), default="upload")
     uploaded_by: Mapped[str | None] = mapped_column(String(36), ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+# ── Mail ──────────────────────────────────────────────────────────────────────
+class Mail(Base):
+    __tablename__ = "mails"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
+    sender_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    recipient_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    subject: Mapped[str] = mapped_column(String(512), nullable=False)
+    body: Mapped[str] = mapped_column(Text, nullable=False)
+    is_read: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+    sender: Mapped["User"] = relationship(back_populates="sent_mails", foreign_keys=[sender_id])
+    recipient: Mapped["User"] = relationship(back_populates="received_mails", foreign_keys=[recipient_id])
+
+
+# ── Todo ──────────────────────────────────────────────────────────────────────
+class Todo(Base):
+    __tablename__ = "todos"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    title: Mapped[str] = mapped_column(String(512), nullable=False)
+    description: Mapped[str | None] = mapped_column(Text)
+    due_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    is_done: Mapped[bool] = mapped_column(Boolean, default=False)
+    priority: Mapped[str] = mapped_column(SAEnum("low", "medium", "high", name="todo_priority"), default="medium")
+    source: Mapped[str] = mapped_column(SAEnum("manual", "ai_summary", "meeting", name="todo_source"), default="manual")
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+    user: Mapped["User"] = relationship(back_populates="todos")
+
+
+# ── Calendar Event ────────────────────────────────────────────────────────────
+class CalendarEvent(Base):
+    __tablename__ = "calendar_events"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    title: Mapped[str] = mapped_column(String(512), nullable=False)
+    description: Mapped[str | None] = mapped_column(Text)
+    start_dt: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    end_dt: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    color: Mapped[str] = mapped_column(String(16), default="#6c63ff")
+    all_day: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+    user: Mapped["User"] = relationship(back_populates="calendar_events")
+
+
+# ── Performance Record ────────────────────────────────────────────────────────
+class PerformanceRecord(Base):
+    __tablename__ = "performance_records"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    period: Mapped[str] = mapped_column(String(32), nullable=False) # e.g. "2026-04-week1"
+    tasks_assigned: Mapped[int] = mapped_column(Integer, default=0)
+    tasks_completed: Mapped[int] = mapped_column(Integer, default=0)
+    meetings_attended: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+    user: Mapped["User"] = relationship()

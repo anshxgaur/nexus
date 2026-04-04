@@ -1,0 +1,60 @@
+﻿
+> nexus-desktop@1.0.0 dev
+> vite
+
+node.exe : [33mThe CJS 
+build of Vite's Node API 
+is deprecated. See https:/
+/vite.dev/guide/troublesho
+oting.html#vite-cjs-node-a
+pi-deprecated for more 
+details.[39m
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (  
+  [33mThe CJS bu...e de   
+ tails.[39m:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m1221[22m[2m[0m ms[22m
+
+  [32mΓ₧£[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3000[22m/[39m
+[2m  [32mΓ₧£[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m[32m  Γ₧£[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+(node:12576) [MODULE_TYPEL
+ESS_PACKAGE_JSON] 
+Warning: Module type of fi
+le:///C:/Users/monis/Downl
+oads/nexus-workspace/nexus
+-workspace/frontend/postcs
+s.config.js is not 
+specified and it doesn't 
+parse as CommonJS.
+Reparsing as ES module 
+because module syntax was 
+detected. This incurs a 
+performance overhead.
+To eliminate this 
+warning, add "type": 
+"module" to C:\Users\monis
+\Downloads\nexus-workspace
+\nexus-workspace\frontend\
+package.json.
+(Use `node 
+--trace-warnings ...` to 
+show where the warning 
+was created)
+[2m4:41:09 pm[22m [36m[1m[vite][22m[39m changed tsconfig file detected: C:\Users\monis\Downloads\nexus-workspace\nexus-workspace\frontend\tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+[2m4:41:09 pm[22m [36m[1m[vite][22m[39m changed tsconfig file detected: C:\Users\monis\Downloads\nexus-workspace\nexus-workspace\frontend\tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+[2m6:18:48 pm[22m [36m[1m[vite][22m[39m changed tsconfig file detected: C:\Users\monis\Downloads\nexus-workspace\nexus-workspace\frontend\tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.

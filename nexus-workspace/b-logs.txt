@@ -1,0 +1,50 @@
+backend-1  |   File "/app/app/api/auth.py", line 41, in register
+backend-1  |     password_hash=hash_password(body.password),
+backend-1  |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/app/app/core/security.py", line 22, in hash_password
+backend-1  |     return pwd_context.hash(password)
+backend-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/context.py", line 2258, in hash
+backend-1  |     return record.hash(secret, **kwds)
+backend-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/utils/handlers.py", line 779, in hash
+backend-1  |     self.checksum = self._calc_checksum(secret)
+backend-1  |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 591, in _calc_checksum
+backend-1  |     self._stub_requires_backend()
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
+backend-1  |     cls.set_backend()
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
+backend-1  |     return owner.set_backend(name, dryrun=dryrun)
+backend-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2163, in set_backend
+backend-1  |     return cls.set_backend(name, dryrun=dryrun)
+backend-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2188, in set_backend
+backend-1  |     cls._set_backend(name, dryrun)
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2311, in _set_backend
+backend-1  |     super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2224, in _set_backend
+backend-1  |     ok = loader(**kwds)
+backend-1  |          ^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 626, in _load_backend_mixin
+backend-1  |     return mixin_cls._finalize_backend_mixin(name, dryrun)
+backend-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 421, in _finalize_backend_mixin
+backend-1  |     if detect_wrap_bug(IDENT_2A):
+backend-1  |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 380, in detect_wrap_bug
+backend-1  |     if verify(secret, bug_hash):
+backend-1  |        ^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/utils/handlers.py", line 792, in verify
+backend-1  |     return consteq(self._calc_checksum(secret), chk)
+backend-1  |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  |   File "/usr/local/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 655, in _calc_checksum
+backend-1  |     hash = _bcrypt.hashpw(secret, config)
+backend-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend-1  | ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+backend-1  | INFO:     127.0.0.1:55014 - "GET /health HTTP/1.1" 200 OK
+backend-1  | INFO:     127.0.0.1:39214 - "GET /health HTTP/1.1" 200 OK
+backend-1  | INFO:     127.0.0.1:51096 - "GET /health HTTP/1.1" 200 OK
+backend-1  | INFO:     127.0.0.1:54732 - "GET /health HTTP/1.1" 200 OK
+backend-1  | INFO:     127.0.0.1:48894 - "GET /health HTTP/1.1" 200 OK
