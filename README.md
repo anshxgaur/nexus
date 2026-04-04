@@ -167,6 +167,82 @@ E --> I[AI Summary]
 F --> J[Priority Tasks]
 G --> K[Storage Access]
 ```
+
+## 🗄️ Data Layer
+The backbone that keeps everything connected and secure.
+
+**Key Features:**
+- **Centralized Storage**: Single source of truth for all organizational data
+- **Secure Authentication**: Role-based access with wallet/auth integration
+- **Historical Tracking**: Complete project history and audit trails
+- **Data Synchronization**: Real-time sync across all modules
+- **Access Control**: Granular permissions based on user roles
+
+**Data Flow:**
+
+```mermaid
+flowchart TD
+    Start([Data Request Initiated]) --> AuthCheck{Authentication<br/>Valid?}
+    
+    AuthCheck -->|No| AuthFail[Return 401 Unauthorized]
+    AuthCheck -->|Yes| RoleCheck{Check User<br/>Permissions}
+    
+    RoleCheck -->|Denied| PermFail[Return 403 Forbidden]
+    RoleCheck -->|Granted| ReqType{Request Type?}
+    
+    ReqType -->|CREATE| Encrypt[Encrypt Sensitive Data]
+    ReqType -->|READ| Query[Query Database]
+    ReqType -->|UPDATE| ValidateUpdate{Validate<br/>Update Data}
+    ReqType -->|DELETE| ValidateDelete{Validate<br/>Delete Request}
+    
+    Encrypt --> GenID[Generate Unique ID]
+    GenID --> Store[(Store in Database)]
+    Store --> LogCreate[Log to Audit Trail]
+    LogCreate --> SyncCreate[Trigger Real-time Sync]
+    SyncCreate --> Success1[Return Success + Data ID]
+    
+    Query --> FetchData[(Fetch from Database)]
+    FetchData --> Decrypt[Decrypt if Encrypted]
+    Decrypt --> Success2[Return Data]
+    
+    ValidateUpdate -->|Invalid| UpdateFail[Return 400 Bad Request]
+    ValidateUpdate -->|Valid| UpdateDB[(Update Database)]
+    UpdateDB --> LogUpdate[Log to Audit Trail]
+    LogUpdate --> SyncUpdate[Trigger Real-time Sync]
+    SyncUpdate --> Success3[Return Updated Data]
+    
+    ValidateDelete -->|Invalid| DeleteFail[Return 400 Bad Request]
+    ValidateDelete -->|Valid| SoftDelete[(Soft Delete/Archive)]
+    SoftDelete --> LogDelete[Log to Audit Trail]
+    LogDelete --> SyncDelete[Trigger Real-time Sync]
+    SyncDelete --> Success4[Return Success]
+    
+    Success1 --> Notify[Notify Connected Modules]
+    Success2 --> End([Request Complete])
+    Success3 --> Notify
+    Success4 --> Notify
+    
+    Notify --> End
+    AuthFail --> End
+    PermFail --> End
+    UpdateFail --> End
+    DeleteFail --> End
+    
+    style Start fill:#4299e1,stroke:#2b6cb0,stroke-width:2px,color:#fff
+    style End fill:#48bb78,stroke:#2f855a,stroke-width:2px,color:#fff
+    style AuthCheck fill:#ed8936,stroke:#c05621,stroke-width:2px,color:#fff
+    style RoleCheck fill:#ed8936,stroke:#c05621,stroke-width:2px,color:#fff
+    style ReqType fill:#9f7aea,stroke:#6b46c1,stroke-width:2px,color:#fff
+    style Store fill:#38b2ac,stroke:#2c7a7b,stroke-width:2px,color:#fff
+    style FetchData fill:#38b2ac,stroke:#2c7a7b,stroke-width:2px,color:#fff
+    style UpdateDB fill:#38b2ac,stroke:#2c7a7b,stroke-width:2px,color:#fff
+    style SoftDelete fill:#38b2ac,stroke:#2c7a7b,stroke-width:2px,color:#fff
+    style AuthFail fill:#f56565,stroke:#c53030,stroke-width:2px,color:#fff
+    style PermFail fill:#f56565,stroke:#c53030,stroke-width:2px,color:#fff
+    style UpdateFail fill:#f56565,stroke:#c53030,stroke-width:2px,color:#fff
+    style DeleteFail fill:#f56565,stroke:#c53030,stroke-width:2px,color:#fff
+```
+
 <br/>
 
 ![gifgithub](https://github.com/user-attachments/assets/54dc1f7a-f327-43ab-ae9c-58c7421eee39)
