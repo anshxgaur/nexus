@@ -19,3 +19,4 @@
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Ananya%20Gupta%20-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ananya-gupta-415658339/) 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Aarush%20Srivastava%20-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/srivastavaaarush/) 
 
+<div align="center">
