@@ -3,6 +3,9 @@
   <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=700&size=50&duration=3000&pause=1000&color=00BFFF&center=true&vCenter=true&width=1000&lines=Hey,+there!;Welcome+to+Nexus+Workspace" alt="Typing SVG">
 </p>
 
+<div align="center">
+
+
 ![Frontend](https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JavaScript%20%7C%20React-0ea5e9?style=for-the-badge)
 ![Styling](https://img.shields.io/badge/Styling-Bootstrap%20%7C%20Sass-8b5cf6?style=for-the-badge)
 ![Backend](https://img.shields.io/badge/Backend-Python%20%7C%20Node.js-22c55e?style=for-the-badge)
@@ -10,6 +13,8 @@
 ![AI](https://img.shields.io/badge/AI-NLP%20%7C%20Summarization%20%7C%20Automation-ef4444?style=for-the-badge)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL%20%7C%20MongoDB-14b8a6?style=for-the-badge)
 ![DevOps](https://img.shields.io/badge/DevOps-Docker%20%7C%20CI/CD-6366f1?style=for-the-badge)
+
+</div>
 
 
 ![](header.png)
