@@ -34,6 +34,11 @@ Build a next-gen corporate ecosystem where workflows are automated, communicatio
 - AI-generated summaries  
 - Calendar integration  
 
+<div>
+  <img src="https://github.com/user-attachments/assets/754f7f48-57b4-4b8f-9054-b21ef7803698" width="300px" align="right" alt="A professional animation coder gif"/>
+</div>
+
+
 ### 📧 Email Intelligence
 - Smart inbox  
 - AI summarization  
