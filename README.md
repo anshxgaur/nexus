@@ -24,7 +24,6 @@
 ## 🧠 Vision
 Build a next-gen corporate ecosystem where workflows are automated, communication is optimized, and decisions are AI-assisted.
 
----
 
 ## ⚙️ Core Modules
 
