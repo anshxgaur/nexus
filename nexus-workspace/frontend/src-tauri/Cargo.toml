@@ -1,0 +1,28 @@
+[package]
+name = "nexus-desktop"
+version = "1.0.0"
+description = "Nexus Workspace Desktop App"
+authors = ["Nexus Team"]
+license = "MIT"
+repository = ""
+default-run = "nexus-desktop"
+edition = "2021"
+rust-version = "1.70"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+tauri = { version = "1.6", features = [
+  "shell-open",
+  "window-all",
+  "notification-all",
+  "global-shortcut-all",
+  "clipboard-all"
+]}
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
