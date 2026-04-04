@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --scrollbar-thumb: #2a2a32;
+    --scrollbar-track: transparent;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+
+  *::-webkit-scrollbar { width: 4px; height: 4px; }
+  *::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+  *::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+
+  ::selection { background: rgba(108,99,255,0.35); }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-accent hover:bg-accent-hover text-white font-medium px-4 py-2 rounded-xl
+           transition-all duration-150 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply hover:bg-surface-overlay text-ink-secondary hover:text-ink-primary font-medium px-3 py-2 
+           rounded-xl transition-all duration-150 active:scale-95;
+  }
+
+  .btn-danger {
+    @apply bg-err/20 hover:bg-err/30 text-err font-medium px-4 py-2 rounded-xl
+           transition-all duration-150 active:scale-95;
+  }
+
+  .input-base {
+    @apply bg-surface-overlay border border-surface-border text-ink-primary placeholder:text-ink-muted
+           rounded-xl px-3 py-2 text-sm outline-none
+           focus:border-accent focus:ring-1 focus:ring-accent/30
+           transition-all duration-150 w-full;
+  }
+
+  .card {
+    @apply bg-surface-raised border border-surface-border rounded-2xl;
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-2.5 px-3 py-2 rounded-xl cursor-pointer
+           text-ink-secondary hover:text-ink-primary hover:bg-surface-overlay
+           transition-all duration-150 text-sm font-medium;
+  }
+
+  .sidebar-item.active {
+    @apply bg-accent-muted text-accent;
+  }
+  
+  .glass {
+    @apply bg-surface-raised/80 backdrop-blur-xl border border-surface-border;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-ok   { @apply badge bg-ok/15 text-ok; }
+  .badge-warn { @apply badge bg-warn/15 text-warn; }
+  .badge-err  { @apply badge bg-err/15 text-err; }
+  .badge-info { @apply badge bg-info/15 text-info; }
+}

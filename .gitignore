@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.env.local
+
+# Rust / Tauri
+frontend/src-tauri/target/
+Cargo.lock
+
+# Docker volumes (local dev)
+postgres_data/
+redis_data/
+qdrant_data/
+ollama_data/
+
+# Environment
+.env
+backend/.env
+whisper-service/.env
+*.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Secrets
+*.pem
+*.key
+*.crt
