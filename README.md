@@ -56,3 +56,40 @@ flowchart TD
     H --> I
 
     I --> C
+```
+## 🔄 Workflow
+
+```mermaid
+sequenceDiagram
+participant U as User
+participant UI as Frontend
+participant BE as Backend
+participant AI as AI Engine
+participant DB as Database
+
+U->>UI: Action (Meeting / Email / Task)
+UI->>BE: API Request
+BE->>DB: Fetch / Store Data
+BE->>AI: Process (Summarize / Prioritize)
+AI-->>BE: Processed Output
+BE-->>UI: Response
+UI-->>U: Display Result
+```
+## 🧪 Feature Flow
+
+```mermaid
+flowchart LR
+A[Login Page] --> B[Auth Connect]
+B --> C[Dashboard]
+
+C --> D[Meetings]
+C --> E[Emails]
+C --> F[Tasks]
+C --> G[Data]
+
+D --> H[Join / Agenda / Upcoming]
+E --> I[AI Summary]
+F --> J[Priority Tasks]
+G --> K[Storage Access]
+```
+
