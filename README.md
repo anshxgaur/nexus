@@ -7,7 +7,6 @@
 
 ![](header.png)
 
-
 ## 👥 The Architects
 
 ### <div><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Globe%20with%20Meridians.png" alt="Globe with Meridians Emoji" width="30px" align="center" /> Let's Stay Connected:</div>
@@ -20,3 +19,7 @@
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Aarush%20Srivastava%20-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/srivastavaaarush/) 
 
 <div align="center">
+<sub>Built with ❤️ for [Eclipse 6.0]</sub>
+</div>
+
+<br/>
