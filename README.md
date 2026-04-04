@@ -4,7 +4,6 @@
   <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=700&size=50&duration=3000&pause=1000&color=00BFFF&center=true&vCenter=true&width=1000&lines=Hey,+there!;Welcome+to+Nexus+Workspace" alt="Typing SVG">
 </p>
 
-## 🛠️ Tech Stack
 
 ![Frontend](https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JavaScript%20%7C%20React-0ea5e9?style=for-the-badge)
 ![Styling](https://img.shields.io/badge/Styling-Bootstrap%20%7C%20Sass-8b5cf6?style=for-the-badge)
