@@ -6,12 +6,6 @@
 
 ![](header.png)
 
-# 🚀 Nexus Workspace — AI-Powered Corporate Ecosystem
-
-> A unified intelligent workspace integrating Meetings, Email, Tasks, and Data into one AI-driven platform.
-
----
-
 ## 🧠 Vision
 Build a next-gen corporate ecosystem where workflows are automated, communication is optimized, and decisions are AI-assisted.
 
