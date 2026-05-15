@@ -4,7 +4,7 @@
 
 Team chat · Video meetings · Live transcription · RAG search · Task extraction
 
----
+----
 
 ## Architecture
 
